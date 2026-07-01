@@ -1,0 +1,198 @@
+aid: puzzle-io
+url: https://raw.githubusercontent.com/api-evangelist/puzzle-io/refs/heads/main/apis.yml
+name: Puzzle
+kind: company
+description: Puzzle is real-time, AI-native accounting software for startups and accounting
+  firms. It builds a continuously reconciled general ledger on top of connected Stripe,
+  bank, card, and payroll data and surfaces financial statements plus startup metrics
+  like burn, runway, and margin. The Puzzle API exposes that same real-time financial
+  data hub and general ledger over a RESTful, OAuth 2.0-secured JSON interface. As
+  of this catalog entry the API is in an active-development, partner-gated rollout,
+  available to platform partners building embedded accounting and to large accounting
+  or advisory firms; individual companies join a waitlist.
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+tags:
+- Accounting
+- Fintech
+- General Ledger
+- Financial Reporting
+- Bookkeeping
+- Startups
+- Embedded Accounting
+- Metrics
+created: '2026-07-01'
+modified: '2026-07-01'
+specificationVersion: '0.19'
+apis:
+- aid: puzzle-io:puzzle-io-companies-api
+  name: Puzzle Companies API
+  tags:
+  - Companies
+  - Accounts
+  - Multi-Entity
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://puzzle-api.readme.io/reference
+  baseURL: https://staging.southparkdata.com
+  properties:
+  - url: https://puzzle-api.readme.io/docs/welcome
+    type: Documentation
+  - url: https://puzzle-api.readme.io/reference
+    type: APIReference
+  - url: openapi/puzzle-io-openapi.yml
+    type: OpenAPI
+  description: Read a partner's connected companies and their accounting configuration.
+    Company IDs returned here scope every other Puzzle API call, which is nested under
+    /rest/v0/company/{id}.
+- aid: puzzle-io:puzzle-io-transactions-api
+  name: Puzzle Transactions API
+  tags:
+  - Transactions
+  - Bank
+  - Cards
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://puzzle-api.readme.io/reference
+  baseURL: https://staging.southparkdata.com
+  properties:
+  - url: https://puzzle-api.readme.io/docs/welcome
+    type: Documentation
+  - url: https://puzzle-api.readme.io/reference
+    type: APIReference
+  - url: openapi/puzzle-io-openapi.yml
+    type: OpenAPI
+  description: Retrieve the normalized, categorized transaction feed Puzzle ingests
+    from connected bank, card, Stripe, and payroll sources for a company, via GET
+    /rest/v0/company/{id}/transactions.
+- aid: puzzle-io:puzzle-io-ledger-accounts-api
+  name: Puzzle Ledger Accounts API
+  tags:
+  - General Ledger
+  - Chart of Accounts
+  - Accounting
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://puzzle-api.readme.io/reference
+  baseURL: https://staging.southparkdata.com
+  properties:
+  - url: https://puzzle-api.readme.io/docs/welcome
+    type: Documentation
+  - url: https://puzzle-api.readme.io/reference
+    type: APIReference
+  - url: openapi/puzzle-io-openapi.yml
+    type: OpenAPI
+  description: Access the chart of accounts and ledger account balances that make up
+    a company's real-time general ledger, supporting both cash and accrual bases.
+- aid: puzzle-io:puzzle-io-journal-entries-api
+  name: Puzzle Journal Entries API
+  tags:
+  - Journal Entries
+  - General Ledger
+  - Sync
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://puzzle-api.readme.io/reference
+  baseURL: https://staging.southparkdata.com
+  properties:
+  - url: https://puzzle-api.readme.io/docs/welcome
+    type: Documentation
+  - url: https://puzzle-api.readme.io/reference
+    type: APIReference
+  - url: openapi/puzzle-io-openapi.yml
+    type: OpenAPI
+  description: Read and sync double-entry journal entries against a company's general
+    ledger, enabling programmatic close and reconciliation workflows.
+- aid: puzzle-io:puzzle-io-reports-api
+  name: Puzzle Financial Reports API
+  tags:
+  - Reports
+  - Financial Statements
+  - Income Statement
+  - Balance Sheet
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://puzzle-api.readme.io/reference
+  baseURL: https://staging.southparkdata.com
+  properties:
+  - url: https://puzzle-api.readme.io/docs/welcome
+    type: Documentation
+  - url: https://puzzle-api.readme.io/reference
+    type: APIReference
+  - url: openapi/puzzle-io-openapi.yml
+    type: OpenAPI
+  description: Generate real-time financial statements - income statement (P&L), balance
+    sheet, and cash activity - for a company over a requested reporting period.
+- aid: puzzle-io:puzzle-io-metrics-api
+  name: Puzzle Metrics API
+  tags:
+  - Metrics
+  - Burn
+  - Runway
+  - Margin
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://puzzle-api.readme.io/reference
+  baseURL: https://staging.southparkdata.com
+  properties:
+  - url: https://puzzle-api.readme.io/docs/welcome
+    type: Documentation
+  - url: https://puzzle-api.readme.io/reference
+    type: APIReference
+  - url: openapi/puzzle-io-openapi.yml
+    type: OpenAPI
+  description: Pull the startup finance metrics Puzzle derives from the ledger - cash
+    balance, monthly burn, runway, gross margin, and revenue - for dashboards and
+    financial planning tools.
+- aid: puzzle-io:puzzle-io-categories-api
+  name: Puzzle Categories API
+  tags:
+  - Categories
+  - Classifications
+  - Bookkeeping
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://puzzle-api.readme.io/reference
+  baseURL: https://staging.southparkdata.com
+  properties:
+  - url: https://puzzle-api.readme.io/docs/welcome
+    type: Documentation
+  - url: https://puzzle-api.readme.io/reference
+    type: APIReference
+  - url: openapi/puzzle-io-openapi.yml
+    type: OpenAPI
+  description: Read the categories, classes, departments, and projects Puzzle's AI
+    categorization uses to code transactions, so partners can mirror and reconcile
+    classification.
+- aid: puzzle-io:puzzle-io-integrations-api
+  name: Puzzle Integrations API
+  tags:
+  - Integrations
+  - Connections
+  - Stripe
+  - Payroll
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://puzzle-api.readme.io/reference
+  baseURL: https://staging.southparkdata.com
+  properties:
+  - url: https://puzzle-api.readme.io/docs/welcome
+    type: Documentation
+  - url: https://puzzle-api.readme.io/reference
+    type: APIReference
+  - url: openapi/puzzle-io-openapi.yml
+    type: OpenAPI
+  description: Inspect the upstream data connections (Stripe, banks, cards, Mercury,
+    Ramp, Brex, Gusto and other payroll) that feed a company's Puzzle ledger, and
+    their sync status.
+common:
+- type: LinkedIn
+  url: https://www.linkedin.com/company/puzzlefin
+- type: Website
+  url: https://puzzle.io
+- type: Documentation
+  url: https://puzzle-api.readme.io/docs/welcome
+- type: SignUp
+  url: https://puzzle.io/partners
+- type: Pricing
+  url: https://puzzle.io/pricing
+- type: Plans
+  url: plans/puzzle-io-plans-pricing.yml
+- type: RateLimits
+  url: rate-limits/puzzle-io-rate-limits.yml
+- type: FinOps
+  url: finops/puzzle-io-finops.yml
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

@@ -1,0 +1,102 @@
+specification: FinOps Framework
+specificationVersion: '1.0'
+schema: https://www.finops.org/framework/
+provider: Puzzle
+providerId: puzzle-io
+created: '2026-07-01'
+modified: '2026-07-01'
+reconciled: false
+tags:
+- Accounting
+- Fintech
+- FinOps
+- Cost Management
+- FOCUS
+description: >-
+  FinOps view of Puzzle spend. Puzzle is billed as a per-company monthly (or
+  discounted annual) SaaS subscription across the Starter, Core, Complete, and
+  Scale tiers, with AI features metered by monthly AI credits and the Starter
+  free tier gated by a $20K cumulative transaction-volume threshold. The Puzzle
+  API is not sold as a separately metered, self-serve product; API access is
+  provisioned through the Partner Program on negotiated commercial terms, so
+  API-specific charges are contract-based rather than usage-priced.
+notes: >-
+  There is no public per-call price for the Puzzle API. Cost management focuses
+  on subscription tier selection, AI-credit consumption, and the transaction
+  volume that moves a company off the free tier. Verify current rates on the
+  pricing page during reconciliation.
+sources:
+- https://puzzle.io/pricing
+- https://help.puzzle.io/en/articles/8891734-faq-pricing
+- https://puzzle.io/partners
+- https://focus.finops.org/focus-specification/v1-3/
+alignedWith:
+  framework: FinOps Foundation Framework
+  frameworkUrl: https://www.finops.org/framework/
+  dataSpec: FOCUS
+  dataSpecVersion: '1.3'
+  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/
+publisherName: Puzzle
+serviceCategory: Accounting and Financial Management
+billingModel:
+  pricingCategory: Subscription-Based
+  billingFrequency: Monthly
+  billingCurrency: USD
+  chargeCategories:
+  - Purchase
+  - Usage
+  - Adjustment
+focusColumns:
+  ServiceName: Puzzle
+  ServiceCategory: Business Applications
+  ProviderName: Puzzle
+  PublisherName: Puzzle
+  InvoiceIssuerName: Puzzle
+  BillingCurrency: USD
+  ChargeCategory: Purchase
+  PricingCategory: Subscription-Based
+meters:
+- name: subscription
+  description: Per-company monthly (or annual) subscription fee for the selected Puzzle tier.
+  unit: subscription
+  aggregation: sum
+  dimensions:
+  - company
+  - tier
+- name: transaction_volume
+  description: >-
+    Cumulative USD transaction volume ingested; the $20K threshold moves a
+    company off the Starter free tier.
+  unit: usd
+  aggregation: sum
+  dimensions:
+  - company
+- name: ai_credits
+  description: >-
+    Monthly AI credits consumed by AI-powered close, categorization, and
+    insights features (100 on Complete, 300 on Scale).
+  unit: credits
+  aggregation: sum
+  dimensions:
+  - company
+  - tier
+- name: api_partner_contract
+  description: >-
+    Negotiated Partner Program access to the API; billed per contract, not
+    per API call.
+  unit: contract
+  aggregation: sum
+  dimensions:
+  - partner
+principles:
+- name: Visibility
+  description: Track which companies exceed the $20K free threshold and each tier's monthly AI-credit burn.
+- name: Allocation
+  description: Map each Puzzle company subscription and any partner API contract to the owning team or client portfolio.
+- name: Optimization
+  description: Right-size tiers per company; reserve Complete/Scale for entities needing AI close, subledgers, or API access; use annual billing for the published discount.
+- name: Accountability
+  description: Review subscription and AI-credit spend monthly; negotiate partner API terms against expected call volume.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

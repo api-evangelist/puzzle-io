@@ -1,0 +1,121 @@
+aid: puzzle-io
+name: Puzzle
+review:
+  question: Does Puzzle offer a public, first-party REST API, and is it openly available?
+  answer: partial
+  date: '2026-07-01'
+  reviewer: API Evangelist
+  summary: |
+    Puzzle DOES have a real, first-party, documented REST API. It is a RESTful
+    JSON interface secured with OAuth 2.0 (scoped) and/or API key
+    authentication, exposing Puzzle's real-time financial data hub and general
+    ledger: transactions, ledger accounts, journal entries, financial
+    statements (income statement, balance sheet, cash activity), startup
+    metrics (cash, burn, runway, margin), categories/classifications, and
+    upstream integration/connection status. Public developer docs exist at
+    https://puzzle-api.readme.io. The confirmed endpoint pattern nests every
+    resource under a company: GET /rest/v0/company/{id}/transactions on the
+    documented server https://staging.southparkdata.com (Puzzle's underlying
+    platform is named "South Park Data").
+
+    HOWEVER, it is NOT openly self-serve. Puzzle describes the API as in an
+    "active development phase," rolled out on a case-by-case basis and gated to
+    (1) platform partners building embedded/core integrations and (2)
+    large-scale accounting and advisory firms managing high-volume portfolios.
+    Individual companies are on a waitlist. Access requires joining the Partner
+    Program (puzzle.io/partners), submitting a use case, and passing a
+    technical review. So this is a genuine API catalog entry, but the honest
+    state is "real API, partner-gated, not generally available."
+apiAvailability:
+  hasPublicFirstPartyApi: true
+  openlyAvailable: false
+  accessModel: partner-gated
+  developmentStatus: active-development
+  documentationPublic: true
+  documentationUrl: https://puzzle-api.readme.io/docs/welcome
+  referenceUrl: https://puzzle-api.readme.io/reference
+  confirmedServer: https://staging.southparkdata.com
+  confirmedEndpointPattern: /rest/v0/company/{id}/...
+  authentication:
+    - OAuth 2.0 (scoped, e.g. read:company / read:transactions / read:report)
+    - API key (Authorization header)
+  eligibleConsumers:
+    - Platform partners building embedded accounting integrations
+    - Large accounting / advisory firms with high-volume portfolios
+  waitlisted:
+    - Individual companies (not yet enabled)
+  accessProcess:
+    - Join the Partner Program at https://puzzle.io/partners
+    - Submit use case during onboarding
+    - Pass Puzzle technical review
+transports:
+  - protocol: REST
+    scheme: https
+    baseURL: https://staging.southparkdata.com
+    documented: true
+  - protocol: WebSocket
+    scheme: wss
+    documented: false
+    note: No WebSocket / realtime streaming API is documented.
+resourceSurfaces:
+  confirmed:
+    - path: GET /rest/v0/company/{id}/transactions
+      note: Exact path and method confirmed from the public API reference.
+  documentedSections:
+    - Companies
+    - Transactions
+    - Accounts (ledger / chart of accounts)
+    - Journal Entries
+    - Financial Statements / Reports (income statement, balance sheet, cash activity)
+    - Metrics
+    - Categories / Classifications (classes, departments, projects)
+    - Bills, Invoices, Customers, Vendors, Workers, Payroll, Products
+    - Integrations / Connections (Stripe, banks, cards, Mercury, Ramp, Brex, Gusto)
+  note: |
+    The documented resource sections above are real (listed in Puzzle's public
+    docs / llms index), but full per-endpoint schemas sit behind a partner
+    login. In openapi/puzzle-io-openapi.yml, only the transactions path is
+    marked confirmed; other paths follow the confirmed
+    /rest/v0/company/{id}/... pattern and documented sections and are flagged
+    x-puzzle-unverified: true. The apis.yml intentionally models the core,
+    stable surfaces (Companies, Transactions, Ledger Accounts, Journal Entries,
+    Reports, Metrics, Categories, Integrations) rather than every gated
+    sub-resource.
+gitHubOrganization:
+  present: false
+  note: |
+    No public first-party Puzzle GitHub organization was found (github.com/puzzle-io,
+    /puzzlefinancial, /puzzlfin all 404). GitHubOrganization is therefore omitted
+    from apis.yml common[] rather than pointing at an unrelated or non-existent org.
+sources:
+  - url: https://puzzle.io/
+    type: Website
+    note: Product homepage - AI accounting software for startups and accounting firms.
+  - url: https://puzzle.io/solutions/api
+    type: ProductPage
+    note: API product page; endpoints for metrics, accounting, reports, transactions; gated to platforms and firms.
+  - url: https://puzzle-api.readme.io/docs/welcome
+    type: Documentation
+    note: Developer docs; RESTful JSON, API key auth; active-development note.
+  - url: https://puzzle-api.readme.io/reference
+    type: APIReference
+    note: API reference; confirmed GET /rest/v0/company/{id}/transactions on https://staging.southparkdata.com.
+  - url: https://help.puzzle.io/en/articles/13623194-api-access-in-puzzle
+    type: HelpCenter
+    note: API access is partner-gated, case-by-case, requires Partner Program + technical review.
+  - url: https://puzzle.io/pricing
+    type: Pricing
+    note: Starter (free to $20K) / Core / Complete / Scale product tiers; API access is separate and quoted.
+actions:
+  openapiPath: openapi/puzzle-io-openapi.yml
+  apisYmlModeled: true
+  reason: |
+    Puzzle has a genuine first-party REST API, so it is modeled as a real API
+    catalog entry (8 API surfaces) with an OpenAPI, plans, rate-limits, and
+    FinOps artifacts. The gated, active-development access model and the
+    absence of a public GitHub org are documented honestly here rather than
+    papered over. Endpoint paths beyond the confirmed transactions call are
+    marked unverified in the OpenAPI.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

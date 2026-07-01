@@ -1,0 +1,163 @@
+specification: API Commons Plans
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/Plans
+provider: Puzzle
+providerId: puzzle-io
+created: '2026-07-01'
+modified: '2026-07-01'
+reconciled: true
+tags:
+- Accounting
+- Fintech
+- Plans
+- Pricing
+description: >-
+  Puzzle sells its accounting software on four subscription tiers billed per
+  company per month (annual billing discounted). The published tiers are
+  Starter (a free tier until $20K of cumulative ingested transaction volume,
+  then paid), Core, Complete, and Scale; this artifact maps them to the
+  Free / Plus / Pro / Enterprise model. Pricing is for the Puzzle product, not
+  the API. The Puzzle API itself is not sold as a metered, self-serve product:
+  API access is granted through the Puzzle Partner Program to platform partners
+  and large accounting/advisory firms after a technical review, on commercial
+  terms negotiated with Puzzle, and is in an active-development, gated rollout.
+notes: >-
+  Prices are as published on the Puzzle pricing page (annual billing shown, with
+  a monthly rate in parentheses in the source). Verify current tiers and the
+  free-tier threshold on the pricing page during reconciliation. API access is
+  quoted by Puzzle, not listed publicly.
+sources:
+- https://puzzle.io/pricing
+- https://help.puzzle.io/en/articles/8891734-faq-pricing
+- https://puzzle.io/partners
+- https://help.puzzle.io/en/articles/13623194-api-access-in-puzzle
+plans:
+- id: puzzle-io-starter-free
+  name: Starter (Free)
+  type: free
+  description: >-
+    Free until $20,000 of cumulative ingested transaction volume (all revenues,
+    expenses, and transfers since account creation), then converts to paid.
+    Real-time general ledger, connected accounts, and core financial statements.
+  entries:
+  - label: Included transaction volume
+    name: transaction_volume
+    type: quota
+    metric: usd_transaction_volume
+    limit: 20000
+    timeFrame: lifetime
+    geo: global
+    unit: 1
+    price: $0 until $20K ingested, then $25/mo (annual) / $30/mo (monthly)
+    userMultiplied: false
+  elements:
+  - name: Real-time general ledger
+  - name: Connected bank / card / Stripe accounts
+  - name: Core financial statements
+- id: puzzle-io-core-plus
+  name: Core (Plus)
+  type: paid
+  description: >-
+    Startup insights - cash, burn, runway, margin - plus spend and revenue
+    tracking, variance analysis, multi-entity via integration, and advanced
+    reporting. Up to 5 users, chat support.
+  entries:
+  - label: Subscription
+    name: subscription
+    type: flat
+    metric: subscription
+    limit: 1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: $30/mo (annual) / $36/mo (monthly)
+    userMultiplied: false
+  elements:
+  - name: Insights (Cash, Burn, Runway, Margin)
+  - name: Spend and revenue tracking
+  - name: Variance analysis
+  - name: Multi-entity via integration
+  - name: Advanced reporting
+- id: puzzle-io-complete-pro
+  name: Complete (Pro)
+  type: paid
+  description: >-
+    AI-powered close - accuracy review, reconciliations, and categorization -
+    with 100 monthly AI credits, revenue recognition, classes/departments/
+    projects tracking, unlimited users, and priority support.
+  entries:
+  - label: Subscription
+    name: subscription
+    type: flat
+    metric: subscription
+    limit: 1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: $50/mo (annual) / $60/mo (monthly)
+    userMultiplied: false
+  - label: AI credits
+    name: ai_credits
+    type: quota
+    metric: ai_credits
+    limit: 100
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: included
+    userMultiplied: false
+  elements:
+  - name: AI-powered accuracy review and reconciliations
+  - name: AI-enhanced categorization
+  - name: Revenue recognition
+  - name: Classes / departments / projects tracking
+  - name: Unlimited users, priority support
+- id: puzzle-io-scale-enterprise
+  name: Scale (Enterprise)
+  type: enterprise
+  description: >-
+    High-volume tier with subledgers (Revenue, Expenses, Payroll), no
+    transaction or integration limits, backup and restore, dedicated support
+    and onboarding, and 300 monthly AI credits. This tier and the Partner
+    Program are the practical path to programmatic API access; API terms are
+    quoted by Puzzle.
+  entries:
+  - label: Subscription
+    name: subscription
+    type: flat
+    metric: subscription
+    limit: 1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: from $150/mo (annual) / $180/mo (monthly)
+    userMultiplied: false
+  - label: AI credits
+    name: ai_credits
+    type: quota
+    metric: ai_credits
+    limit: 300
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: included
+    userMultiplied: false
+  - label: API / Partner access
+    name: api_access
+    type: enterprise
+    metric: contract
+    limit: -1
+    timeFrame: year
+    geo: global
+    unit: 1
+    price: contact Puzzle (Partner Program)
+    userMultiplied: false
+  elements:
+  - name: Subledgers (Revenue, Expenses, Payroll)
+  - name: No transaction or integration limits
+  - name: Backup and restore
+  - name: Dedicated support and onboarding
+  - name: Partner API access (gated, quoted)
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

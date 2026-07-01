@@ -1,0 +1,158 @@
+{
+  "info": {
+    "name": "Puzzle Accounting API",
+    "description": "Real-time general ledger and financial data hub API for Puzzle. Partner-gated (Partner Program + technical review). Confirmed server https://staging.southparkdata.com and confirmed endpoint GET /rest/v0/company/{id}/transactions. Other requests follow the documented resource sections and the confirmed /rest/v0/company/{id}/... pattern; exact paths beyond transactions are unverified against the gated reference.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [ { "key": "token", "value": "{{accessToken}}", "type": "string" } ]
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "https://staging.southparkdata.com" },
+    { "key": "accessToken", "value": "" },
+    { "key": "companyId", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Companies",
+      "item": [
+        {
+          "name": "List companies",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/rest/v0/companies", "host": ["{{baseUrl}}"], "path": ["rest", "v0", "companies"] },
+            "description": "List companies accessible to the partner (unverified path)."
+          }
+        },
+        {
+          "name": "Get a company",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/rest/v0/company/{{companyId}}", "host": ["{{baseUrl}}"], "path": ["rest", "v0", "company", "{{companyId}}"] },
+            "description": "Retrieve a single company (unverified path)."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Transactions",
+      "item": [
+        {
+          "name": "List transactions",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/rest/v0/company/{{companyId}}/transactions", "host": ["{{baseUrl}}"], "path": ["rest", "v0", "company", "{{companyId}}", "transactions"] },
+            "description": "Confirmed endpoint: normalized, categorized transaction feed for a company."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Accounts",
+      "item": [
+        {
+          "name": "List ledger accounts",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/rest/v0/company/{{companyId}}/accounts", "host": ["{{baseUrl}}"], "path": ["rest", "v0", "company", "{{companyId}}", "accounts"] },
+            "description": "Chart of accounts and ledger balances (unverified path)."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Journal Entries",
+      "item": [
+        {
+          "name": "List journal entries",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/rest/v0/company/{{companyId}}/journal-entries", "host": ["{{baseUrl}}"], "path": ["rest", "v0", "company", "{{companyId}}", "journal-entries"] },
+            "description": "Double-entry journal entries (unverified path)."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Reports",
+      "item": [
+        {
+          "name": "Get income statement",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/rest/v0/company/{{companyId}}/reports/income-statement?startDate=&endDate=",
+              "host": ["{{baseUrl}}"],
+              "path": ["rest", "v0", "company", "{{companyId}}", "reports", "income-statement"],
+              "query": [ { "key": "startDate", "value": "" }, { "key": "endDate", "value": "" } ]
+            },
+            "description": "Real-time income statement / P&L (unverified path)."
+          }
+        },
+        {
+          "name": "Get balance sheet",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/rest/v0/company/{{companyId}}/reports/balance-sheet?asOf=",
+              "host": ["{{baseUrl}}"],
+              "path": ["rest", "v0", "company", "{{companyId}}", "reports", "balance-sheet"],
+              "query": [ { "key": "asOf", "value": "" } ]
+            },
+            "description": "Real-time balance sheet (unverified path)."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Metrics",
+      "item": [
+        {
+          "name": "Get financial metrics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/rest/v0/company/{{companyId}}/metrics", "host": ["{{baseUrl}}"], "path": ["rest", "v0", "company", "{{companyId}}", "metrics"] },
+            "description": "Cash, burn, runway, margin, revenue metrics (unverified path)."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Categories",
+      "item": [
+        {
+          "name": "List categories",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/rest/v0/company/{{companyId}}/categories", "host": ["{{baseUrl}}"], "path": ["rest", "v0", "company", "{{companyId}}", "categories"] },
+            "description": "Categories, classes, departments, projects (unverified path)."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Integrations",
+      "item": [
+        {
+          "name": "List integrations",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/rest/v0/company/{{companyId}}/integrations", "host": ["{{baseUrl}}"], "path": ["rest", "v0", "company", "{{companyId}}", "integrations"] },
+            "description": "Upstream connections (Stripe, banks, cards, payroll) and sync status (unverified path)."
+          }
+        }
+      ]
+    }
+  ]
+}

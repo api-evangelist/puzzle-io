@@ -1,0 +1,149 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Puzzle Accounting API",
+    "version": "0.19.0",
+    "description": "Real-time general ledger and financial data hub API for Puzzle. Partner-gated. Confirmed server https://staging.southparkdata.com; confirmed pattern GET /rest/v0/company/{id}/transactions. Other paths follow the documented resource sections and the confirmed /rest/v0/company/{id}/... pattern and are unverified against the gated reference."
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{accessToken}}"
+    },
+    "baseUrl": "{{baseUrl}}"
+  },
+  "variables": [
+    { "name": "baseUrl", "value": "https://staging.southparkdata.com" },
+    { "name": "accessToken", "value": "" },
+    { "name": "companyId", "value": "" }
+  ],
+  "items": [
+    {
+      "info": { "name": "Companies", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "List companies", "type": "http" },
+          "http": { "method": "GET", "url": "{{baseUrl}}/rest/v0/companies" },
+          "docs": "List companies accessible to the partner (unverified path)."
+        },
+        {
+          "info": { "name": "Get a company", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/rest/v0/company/:id",
+            "params": [ { "name": "id", "value": "{{companyId}}", "type": "path", "description": "The company ID." } ]
+          },
+          "docs": "Retrieve a single company (unverified path)."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Transactions", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "List transactions", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/rest/v0/company/:id/transactions",
+            "params": [ { "name": "id", "value": "{{companyId}}", "type": "path", "description": "The company ID." } ]
+          },
+          "docs": "Confirmed endpoint: normalized, categorized transaction feed for a company."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Accounts", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "List ledger accounts", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/rest/v0/company/:id/accounts",
+            "params": [ { "name": "id", "value": "{{companyId}}", "type": "path", "description": "The company ID." } ]
+          },
+          "docs": "Chart of accounts and ledger balances (unverified path)."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Journal Entries", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "List journal entries", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/rest/v0/company/:id/journal-entries",
+            "params": [ { "name": "id", "value": "{{companyId}}", "type": "path", "description": "The company ID." } ]
+          },
+          "docs": "Double-entry journal entries (unverified path)."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Reports", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "Get income statement", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/rest/v0/company/:id/reports/income-statement?startDate=&endDate=",
+            "params": [ { "name": "id", "value": "{{companyId}}", "type": "path", "description": "The company ID." } ]
+          },
+          "docs": "Real-time income statement / P&L (unverified path)."
+        },
+        {
+          "info": { "name": "Get balance sheet", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/rest/v0/company/:id/reports/balance-sheet?asOf=",
+            "params": [ { "name": "id", "value": "{{companyId}}", "type": "path", "description": "The company ID." } ]
+          },
+          "docs": "Real-time balance sheet (unverified path)."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Metrics", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "Get financial metrics", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/rest/v0/company/:id/metrics",
+            "params": [ { "name": "id", "value": "{{companyId}}", "type": "path", "description": "The company ID." } ]
+          },
+          "docs": "Cash, burn, runway, margin, revenue metrics (unverified path)."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Categories", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "List categories", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/rest/v0/company/:id/categories",
+            "params": [ { "name": "id", "value": "{{companyId}}", "type": "path", "description": "The company ID." } ]
+          },
+          "docs": "Categories, classes, departments, projects (unverified path)."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Integrations", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "List integrations", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/rest/v0/company/:id/integrations",
+            "params": [ { "name": "id", "value": "{{companyId}}", "type": "path", "description": "The company ID." } ]
+          },
+          "docs": "Upstream connections (Stripe, banks, cards, payroll) and sync status (unverified path)."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

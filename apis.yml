@@ -177,6 +177,8 @@ apis:
     Ramp, Brex, Gusto and other payroll) that feed a company's Puzzle ledger, and
     their sync status.
 common:
+- type: DomainSecurity
+  url: security/puzzle-io-domain-security.yml
 - type: Authentication
   url: authentication/puzzle-io-authentication.yml
 - type: OAuthScopes

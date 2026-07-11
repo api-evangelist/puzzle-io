@@ -1,0 +1,36 @@
+generated: '2026-07-11'
+method: derived
+source: openapi/puzzle-io-openapi.yml
+schemes:
+- name: oauth2
+  source: openapi/puzzle-io-openapi.yml
+  flows:
+  - flow: clientCredentials
+    tokenUrl: https://puzzle-api.readme.io/reference
+  description: OAuth 2.0 with scoped access (for example read:company, read:transactions, read:report).
+    Partner credentials are issued after the Puzzle partner technical review.
+scopes:
+- scope: read:accounts
+  description: Read ledger accounts
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/puzzle-io-openapi.yml
+- scope: read:company
+  description: Read company data
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/puzzle-io-openapi.yml
+- scope: read:report
+  description: Read financial statements
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/puzzle-io-openapi.yml
+- scope: read:transactions
+  description: Read transactions
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/puzzle-io-openapi.yml

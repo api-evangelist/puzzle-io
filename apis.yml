@@ -177,6 +177,10 @@ apis:
     Ramp, Brex, Gusto and other payroll) that feed a company's Puzzle ledger, and
     their sync status.
 common:
+- type: Authentication
+  url: authentication/puzzle-io-authentication.yml
+- type: OAuthScopes
+  url: scopes/puzzle-io-scopes.yml
 - type: LinkedIn
   url: https://www.linkedin.com/company/puzzlefin
 - type: Website
@@ -193,6 +197,8 @@ common:
   url: rate-limits/puzzle-io-rate-limits.yml
 - type: FinOps
   url: finops/puzzle-io-finops.yml
+- type: Blog
+  url: https://puzzle.io/blog
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com

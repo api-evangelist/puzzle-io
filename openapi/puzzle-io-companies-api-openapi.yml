@@ -1,0 +1,124 @@
+openapi: 3.0.3
+info:
+  title: Puzzle Accounting Accounts Companies API
+  description: 'RESTful, JSON API for Puzzle''s real-time financial data hub and general ledger. Puzzle builds a continuously reconciled general ledger on top of a company''s connected Stripe, bank, card, and payroll data and exposes the resulting transactions, ledger accounts, journal entries, financial statements, and startup metrics over HTTPS.
+
+
+    ACCURACY NOTE (API Evangelist, 2026-07-01): The Puzzle API is real, documented, and RESTful, but is in an active-development, partner-gated rollout. Full endpoint schemas are behind a partner login, so this specification models the confirmed base URL, security scheme, and resource surfaces. The confirmed endpoint pattern is `GET /rest/v0/company/{id}/transactions`; every resource is nested under `/rest/v0/company/{id}`. Paths marked with `x-puzzle-unverified: true` follow the documented resource sections and this confirmed pattern but the exact operation paths were not individually verified against the gated reference. Verify against https://puzzle-api.readme.io/reference before production use.'
+  version: 0.19.0
+  termsOfService: https://puzzle.io/terms
+  contact:
+    name: Puzzle API Support
+    email: support@puzzle.io
+    url: https://puzzle-api.readme.io/docs/welcome
+servers:
+- url: https://staging.southparkdata.com
+  description: Documented Puzzle API server (Puzzle's underlying data platform is named South Park Data). Confirmed from the public API reference.
+security:
+- oauth2: []
+- apiKey: []
+tags:
+- name: Companies
+  description: Companies connected to a Puzzle partner account.
+paths:
+  /rest/v0/companies:
+    get:
+      operationId: listCompanies
+      tags:
+      - Companies
+      summary: List companies
+      description: List the companies accessible to the authenticated partner. Returned company IDs scope all other endpoints.
+      x-puzzle-unverified: true
+      responses:
+        '200':
+          description: A list of companies.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Company'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /rest/v0/company/{id}:
+    get:
+      operationId: getCompany
+      tags:
+      - Companies
+      summary: Get a company
+      description: Retrieve a single company and its accounting configuration.
+      x-puzzle-unverified: true
+      parameters:
+      - $ref: '#/components/parameters/CompanyId'
+      responses:
+        '200':
+          description: A company.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Company'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  parameters:
+    CompanyId:
+      name: id
+      in: path
+      required: true
+      description: The company ID.
+      schema:
+        type: string
+  responses:
+    Unauthorized:
+      description: Missing or invalid credentials.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: The requested resource does not exist or is not accessible.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string
+    Company:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        basis:
+          type: string
+          enum:
+          - cash
+          - accrual
+        fiscalYearStart:
+          type: string
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      description: OAuth 2.0 with scoped access (for example read:company, read:transactions, read:report). Partner credentials are issued after the Puzzle partner technical review.
+      flows:
+        clientCredentials:
+          tokenUrl: https://puzzle-api.readme.io/reference
+          scopes:
+            read:company: Read company data
+            read:transactions: Read transactions
+            read:accounts: Read ledger accounts
+            read:report: Read financial statements
+    apiKey:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: API key authentication via the Authorization header, as described in the Puzzle developer docs.

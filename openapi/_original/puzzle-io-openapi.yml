@@ -1,0 +1,508 @@
+openapi: 3.0.3
+info:
+  title: Puzzle Accounting API
+  description: >-
+    RESTful, JSON API for Puzzle's real-time financial data hub and general
+    ledger. Puzzle builds a continuously reconciled general ledger on top of a
+    company's connected Stripe, bank, card, and payroll data and exposes the
+    resulting transactions, ledger accounts, journal entries, financial
+    statements, and startup metrics over HTTPS.
+
+
+    ACCURACY NOTE (API Evangelist, 2026-07-01): The Puzzle API is real,
+    documented, and RESTful, but is in an active-development, partner-gated
+    rollout. Full endpoint schemas are behind a partner login, so this
+    specification models the confirmed base URL, security scheme, and resource
+    surfaces. The confirmed endpoint pattern is
+    `GET /rest/v0/company/{id}/transactions`; every resource is nested under
+    `/rest/v0/company/{id}`. Paths marked with `x-puzzle-unverified: true`
+    follow the documented resource sections and this confirmed pattern but the
+    exact operation paths were not individually verified against the gated
+    reference. Verify against https://puzzle-api.readme.io/reference before
+    production use.
+  version: 0.19.0
+  termsOfService: https://puzzle.io/terms
+  contact:
+    name: Puzzle API Support
+    email: support@puzzle.io
+    url: https://puzzle-api.readme.io/docs/welcome
+servers:
+  - url: https://staging.southparkdata.com
+    description: >-
+      Documented Puzzle API server (Puzzle's underlying data platform is named
+      South Park Data). Confirmed from the public API reference.
+security:
+  - oauth2: []
+  - apiKey: []
+tags:
+  - name: Companies
+    description: Companies connected to a Puzzle partner account.
+  - name: Transactions
+    description: Normalized, categorized transaction feed from connected sources.
+  - name: Accounts
+    description: Ledger accounts and chart of accounts.
+  - name: Journal Entries
+    description: Double-entry journal entries against the general ledger.
+  - name: Reports
+    description: Real-time financial statements.
+  - name: Metrics
+    description: Startup finance metrics derived from the ledger.
+  - name: Categories
+    description: Categories, classes, departments, and projects for classification.
+  - name: Integrations
+    description: Upstream data connections that feed the ledger.
+paths:
+  /rest/v0/companies:
+    get:
+      operationId: listCompanies
+      tags:
+        - Companies
+      summary: List companies
+      description: >-
+        List the companies accessible to the authenticated partner. Returned
+        company IDs scope all other endpoints.
+      x-puzzle-unverified: true
+      responses:
+        '200':
+          description: A list of companies.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Company'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /rest/v0/company/{id}:
+    get:
+      operationId: getCompany
+      tags:
+        - Companies
+      summary: Get a company
+      description: Retrieve a single company and its accounting configuration.
+      x-puzzle-unverified: true
+      parameters:
+        - $ref: '#/components/parameters/CompanyId'
+      responses:
+        '200':
+          description: A company.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Company'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /rest/v0/company/{id}/transactions:
+    get:
+      operationId: listTransactions
+      tags:
+        - Transactions
+      summary: List transactions
+      description: >-
+        Retrieve the normalized, categorized transactions Puzzle ingests from a
+        company's connected bank, card, Stripe, and payroll sources. This
+        endpoint path is confirmed from the public API reference.
+      parameters:
+        - $ref: '#/components/parameters/CompanyId'
+        - name: startDate
+          in: query
+          description: Inclusive lower bound (ISO 8601 date) for transaction date.
+          schema:
+            type: string
+            format: date
+        - name: endDate
+          in: query
+          description: Inclusive upper bound (ISO 8601 date) for transaction date.
+          schema:
+            type: string
+            format: date
+        - name: limit
+          in: query
+          description: Maximum number of transactions to return per page.
+          schema:
+            type: integer
+            default: 100
+        - name: cursor
+          in: query
+          description: Opaque pagination cursor from a previous response.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A page of transactions.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Transaction'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /rest/v0/company/{id}/accounts:
+    get:
+      operationId: listAccounts
+      tags:
+        - Accounts
+      summary: List ledger accounts
+      description: >-
+        List the chart of accounts and ledger account balances for a company's
+        general ledger.
+      x-puzzle-unverified: true
+      parameters:
+        - $ref: '#/components/parameters/CompanyId'
+      responses:
+        '200':
+          description: A list of ledger accounts.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LedgerAccount'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /rest/v0/company/{id}/journal-entries:
+    get:
+      operationId: listJournalEntries
+      tags:
+        - Journal Entries
+      summary: List journal entries
+      description: >-
+        Read double-entry journal entries posted to a company's general ledger.
+      x-puzzle-unverified: true
+      parameters:
+        - $ref: '#/components/parameters/CompanyId'
+      responses:
+        '200':
+          description: A list of journal entries.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/JournalEntry'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /rest/v0/company/{id}/reports/income-statement:
+    get:
+      operationId: getIncomeStatement
+      tags:
+        - Reports
+      summary: Get income statement
+      description: >-
+        Generate a real-time income statement (profit and loss) for a company
+        over a requested reporting period.
+      x-puzzle-unverified: true
+      parameters:
+        - $ref: '#/components/parameters/CompanyId'
+        - name: startDate
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+        - name: endDate
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+        - name: basis
+          in: query
+          description: Accounting basis for the report.
+          schema:
+            type: string
+            enum: [cash, accrual]
+      responses:
+        '200':
+          description: An income statement report.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FinancialReport'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /rest/v0/company/{id}/reports/balance-sheet:
+    get:
+      operationId: getBalanceSheet
+      tags:
+        - Reports
+      summary: Get balance sheet
+      description: Generate a real-time balance sheet for a company as of a date.
+      x-puzzle-unverified: true
+      parameters:
+        - $ref: '#/components/parameters/CompanyId'
+        - name: asOf
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: A balance sheet report.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FinancialReport'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /rest/v0/company/{id}/metrics:
+    get:
+      operationId: getMetrics
+      tags:
+        - Metrics
+      summary: Get financial metrics
+      description: >-
+        Pull the startup finance metrics Puzzle derives from the ledger - cash
+        balance, monthly burn, runway, gross margin, and revenue.
+      x-puzzle-unverified: true
+      parameters:
+        - $ref: '#/components/parameters/CompanyId'
+        - name: asOf
+          in: query
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: A metrics snapshot.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Metrics'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /rest/v0/company/{id}/categories:
+    get:
+      operationId: listCategories
+      tags:
+        - Categories
+      summary: List categories
+      description: >-
+        List the categories, classes, departments, and projects used to code a
+        company's transactions.
+      x-puzzle-unverified: true
+      parameters:
+        - $ref: '#/components/parameters/CompanyId'
+      responses:
+        '200':
+          description: A list of categories.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Category'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /rest/v0/company/{id}/integrations:
+    get:
+      operationId: listIntegrations
+      tags:
+        - Integrations
+      summary: List integrations
+      description: >-
+        Inspect the upstream data connections (Stripe, banks, cards, Mercury,
+        Ramp, Brex, Gusto and other payroll) feeding a company's ledger, with
+        their sync status.
+      x-puzzle-unverified: true
+      parameters:
+        - $ref: '#/components/parameters/CompanyId'
+      responses:
+        '200':
+          description: A list of connected integrations.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Integration'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+components:
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      description: >-
+        OAuth 2.0 with scoped access (for example read:company,
+        read:transactions, read:report). Partner credentials are issued after
+        the Puzzle partner technical review.
+      flows:
+        clientCredentials:
+          tokenUrl: https://puzzle-api.readme.io/reference
+          scopes:
+            read:company: Read company data
+            read:transactions: Read transactions
+            read:accounts: Read ledger accounts
+            read:report: Read financial statements
+    apiKey:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: >-
+        API key authentication via the Authorization header, as described in
+        the Puzzle developer docs.
+  parameters:
+    CompanyId:
+      name: id
+      in: path
+      required: true
+      description: The company ID.
+      schema:
+        type: string
+  responses:
+    Unauthorized:
+      description: Missing or invalid credentials.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: The requested resource does not exist or is not accessible.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    Company:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        basis:
+          type: string
+          enum: [cash, accrual]
+        fiscalYearStart:
+          type: string
+    Transaction:
+      type: object
+      properties:
+        id:
+          type: string
+        date:
+          type: string
+          format: date
+        description:
+          type: string
+        amount:
+          type: number
+        currency:
+          type: string
+        source:
+          type: string
+          description: Upstream source, e.g. bank, stripe, card, payroll.
+        categoryId:
+          type: string
+        accountId:
+          type: string
+    LedgerAccount:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        type:
+          type: string
+          description: Asset, Liability, Equity, Revenue, or Expense.
+        balance:
+          type: number
+    JournalEntry:
+      type: object
+      properties:
+        id:
+          type: string
+        date:
+          type: string
+          format: date
+        memo:
+          type: string
+        lines:
+          type: array
+          items:
+            type: object
+            properties:
+              accountId:
+                type: string
+              debit:
+                type: number
+              credit:
+                type: number
+    FinancialReport:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [income-statement, balance-sheet, cash-activity]
+        periodStart:
+          type: string
+          format: date
+        periodEnd:
+          type: string
+          format: date
+        basis:
+          type: string
+          enum: [cash, accrual]
+        lines:
+          type: array
+          items:
+            type: object
+            properties:
+              label:
+                type: string
+              amount:
+                type: number
+    Metrics:
+      type: object
+      properties:
+        asOf:
+          type: string
+          format: date
+        cashBalance:
+          type: number
+        monthlyBurn:
+          type: number
+        runwayMonths:
+          type: number
+        grossMargin:
+          type: number
+        revenue:
+          type: number
+    Category:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        kind:
+          type: string
+          description: category, class, department, or project.
+    Integration:
+      type: object
+      properties:
+        id:
+          type: string
+        provider:
+          type: string
+          description: e.g. stripe, mercury, ramp, brex, gusto, plaid.
+        status:
+          type: string
+          description: Sync status, e.g. connected, syncing, error.
+        lastSyncedAt:
+          type: string
+          format: date-time
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string

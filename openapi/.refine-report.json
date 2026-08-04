@@ -1,0 +1,28 @@
+{
+  "provider": "puzzle-io",
+  "sources": [
+    "puzzle-io-accounts-api-openapi.yml",
+    "puzzle-io-categories-api-openapi.yml",
+    "puzzle-io-companies-api-openapi.yml",
+    "puzzle-io-integrations-api-openapi.yml",
+    "puzzle-io-journal-entries-api-openapi.yml",
+    "puzzle-io-metrics-api-openapi.yml",
+    "puzzle-io-reports-api-openapi.yml",
+    "puzzle-io-transactions-api-openapi.yml"
+  ],
+  "outputs": [
+    "puzzle-io-accounts-api-openapi.yml",
+    "puzzle-io-categories-api-openapi.yml",
+    "puzzle-io-companies-api-openapi.yml",
+    "puzzle-io-integrations-api-openapi.yml",
+    "puzzle-io-journal-entries-api-openapi.yml",
+    "puzzle-io-metrics-api-openapi.yml",
+    "puzzle-io-reports-api-openapi.yml",
+    "puzzle-io-transactions-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}
